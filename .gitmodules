@@ -1,3 +1,6 @@
 [submodule "Holt/vendor/spdlog"]
 	path = Holt/vendor/spdlog
 	url = https://github.com/wooodiest/spdlog
+[submodule "Holt/vendor/GLFW"]
+	path = Holt/vendor/GLFW
+	url = https://github.com/wooodiest/glfw

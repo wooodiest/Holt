@@ -2,10 +2,11 @@
 
 #ifdef HL_PLATFORM_WINDOWS
 	
+extern Holt::Application* Holt::CreateApplication();
+
 int main(int argc, char** argv)
 {
 	Holt::Log::Init();
-	HL_INFO("App is running");
 
 	auto app = Holt::CreateApplication();
 	app->Run();
