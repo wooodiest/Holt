@@ -1,0 +1,3 @@
+[submodule "Holt/vendor/spdlog"]
+	path = Holt/vendor/spdlog
+	url = https://github.com/wooodiest/spdlog

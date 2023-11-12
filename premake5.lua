@@ -37,7 +37,8 @@ project "Holt"
 
 	includedirs
     {
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{prj.name}/vendor/spdlog/include",
 	}
 
 	filter "system:windows"
@@ -82,7 +83,9 @@ project "Sandbox"
 
 	includedirs
 	{
-		"Holt/src"
+		"Holt/src",
+		"Holt/vendor/spdlog/include",
+		"Holt/vendor"
 	}
 
 	links
