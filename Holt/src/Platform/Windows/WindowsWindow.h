@@ -19,6 +19,7 @@ namespace Holt {
 		inline unsigned int GetHeight() const override { return m_Data.Height; }
 
 		// Window attributes
+		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		virtual void SetVSync(bool enebled) override;
 		virtual bool IsVSync() const override;
 
@@ -37,6 +38,7 @@ namespace Holt {
 			std::string Title;
 			unsigned int Width, Height;
 			bool VSync;
+			EventCallbackFn EventCallback;
 		};
 		WindowData m_Data;
 
