@@ -10,6 +10,8 @@
 #include "Holt/Core/KeyCodes.h"
 #include "Holt/Core/MouseButtonCodes.h"
 
+#include "Holt/ImGui/ImGuiLayer.h"
+
 // ---Entry Point---------------------
 #include "Holt/Core/EntryPoint.h"
 // -----------------------------------

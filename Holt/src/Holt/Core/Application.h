@@ -7,6 +7,7 @@
 #include "Holt/Events/ApplicationEvent.h"
 #include "Holt/Events/KeyEvent.h"
 #include "Holt/Events/MouseEvent.h"
+#include "Holt/ImGui/ImGuiLayer.h"
 
 namespace Holt {
 
@@ -29,6 +30,7 @@ namespace Holt {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 

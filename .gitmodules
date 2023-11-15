@@ -4,3 +4,7 @@
 [submodule "Holt/vendor/GLFW"]
 	path = Holt/vendor/GLFW
 	url = https://github.com/wooodiest/glfw
+[submodule "Holt/vendor/imgui"]
+	path = Holt/vendor/imgui
+	url = https://github.com/wooodiest/imgui.git
+	branch = docking
