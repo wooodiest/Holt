@@ -8,3 +8,6 @@
 	path = Holt/vendor/imgui
 	url = https://github.com/wooodiest/imgui.git
 	branch = docking
+[submodule "Holt/vendor/glm"]
+	path = Holt/vendor/glm
+	url = https://github.com/wooodiest/glm
