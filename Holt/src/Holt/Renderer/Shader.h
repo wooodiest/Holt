@@ -2,7 +2,8 @@
 
 #include <unordered_map>
 #include "glm/glm.hpp"
-#include "glad/glad.h"
+// TODO: REMOVE!
+typedef unsigned int GLenum;
 
 namespace Holt {
 

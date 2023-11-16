@@ -106,7 +106,8 @@ project "Sandbox"
 	{
 		"Holt/src",
 		"Holt/vendor/spdlog/include",
-		"Holt/vendor"
+		"Holt/vendor",
+		"Holt/vendor/glm"
 	}
 
 	links

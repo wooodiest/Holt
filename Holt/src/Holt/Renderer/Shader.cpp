@@ -2,10 +2,9 @@
 #include "Shader.h"
 
 #include "Holt/Core/Core.h"
-
+#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <glad/glad.h>
 #include <fstream>
 
 namespace Holt {

@@ -1,13 +1,21 @@
 #pragma once
 
+#include "Core.h"
 #include "Window.h"
 
 #include "Holt/Core/LayerStack.h"
+
 #include "Holt/Events/Event.h"
 #include "Holt/Events/ApplicationEvent.h"
 #include "Holt/Events/KeyEvent.h"
 #include "Holt/Events/MouseEvent.h"
+
 #include "Holt/ImGui/ImGuiLayer.h"
+
+#include "Holt/Renderer/Shader.h"
+#include "Holt/Renderer/Buffer.h"
+#include "Holt/Renderer/VertexArray.h"
+
 
 namespace Holt {
 
@@ -33,6 +41,9 @@ namespace Holt {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
 
 	private:
 		static Application* s_Instance;
