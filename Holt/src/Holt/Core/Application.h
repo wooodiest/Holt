@@ -16,6 +16,8 @@
 #include "Holt/Renderer/Buffer.h"
 #include "Holt/Renderer/VertexArray.h"
 
+#include "Holt/Renderer/OrthographicCamera.h"
+
 
 namespace Holt {
 
@@ -44,6 +46,8 @@ namespace Holt {
 
 		std::shared_ptr<Shader> m_Shader;
 		std::shared_ptr<VertexArray> m_VertexArray;
+
+		OrthographicCamera m_Camera;
 
 	private:
 		static Application* s_Instance;
