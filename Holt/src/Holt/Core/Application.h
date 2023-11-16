@@ -44,11 +44,6 @@ namespace Holt {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		OrthographicCamera m_Camera;
-
 	private:
 		static Application* s_Instance;
 

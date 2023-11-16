@@ -12,6 +12,17 @@
 
 #include "Holt/ImGui/ImGuiLayer.h"
 
+// ---Renderer------------------------
+
+#include "Holt/Renderer/Renderer.h"
+#include "Holt/Renderer/RenderCommand.h"
+		
+#include "Holt/Renderer/Buffer.h"
+#include "Holt/Renderer/Shader.h"
+#include "Holt/Renderer/VertexArray.h"
+	
+#include "Holt/Renderer/OrthographicCamera.h"
+
 // ---Entry Point---------------------
 #include "Holt/Core/EntryPoint.h"
 // -----------------------------------
