@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "Holt/Events/Event.h"
+#include "Holt/Core/Timestep.h"
 
 namespace Holt {
 
@@ -13,7 +14,7 @@ namespace Holt {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 
