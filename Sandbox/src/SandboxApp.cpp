@@ -109,19 +109,21 @@ public:
 			}
 		)";
 
-		std::string fragmentSrcBlue = R"(
+		std::string fragmentSrcFlat = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
-
+			
+			uniform vec4 u_Color;
+			
 			in vec3 v_Position;
 
 			void main()
 			{
-				color = vec4(0.2, 0.3, 0.8, 1.0);
+				color = u_Color;
 			}
 		)";
-		m_BlueShader.reset(new Holt::Shader("BlueShader", vertexSrcBlue, fragmentSrcBlue));
+		m_FlatShader.reset(new Holt::Shader("BlueShader", vertexSrcBlue, fragmentSrcFlat));
 		
 	}
 
@@ -166,14 +168,19 @@ public:
 		///
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
-
+		
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
 			{
 				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				Holt::Renderer::Submit(m_BlueShader, m_SquareVertexArray, transform);
+				if (x % 2 == 0)
+					m_FlatShader->UploadUniformFloat4("u_Color", colorBlue);
+				else
+					m_FlatShader->UploadUniformFloat4("u_Color", colorRed);
+
+				Holt::Renderer::Submit(m_FlatShader, m_SquareVertexArray, transform);
 			}
 		}
 
@@ -188,7 +195,10 @@ public:
 	virtual void OnImGuiRender() override
 	{
 		ImGui::Begin("Test");
-		ImGui::Text("Hello World");
+		
+		ImGui::ColorPicker4("Color - 1", &colorBlue.r);
+		ImGui::ColorPicker4("Color - 2", &colorRed.r);
+
 		ImGui::End();
 	}
 
@@ -201,7 +211,7 @@ private:
 	std::shared_ptr<Holt::Shader> m_Shader;
 	std::shared_ptr<Holt::VertexArray> m_VertexArray;
 
-	std::shared_ptr<Holt::Shader> m_BlueShader;
+	std::shared_ptr<Holt::Shader> m_FlatShader;
 	std::shared_ptr<Holt::VertexArray> m_SquareVertexArray;
 
 	///
@@ -217,6 +227,8 @@ private:
 	glm::vec3 m_TriangleTransform;
 	float m_TriangleTransformSpeed = 1.0f;
 
+	glm::vec4 colorBlue = { 0.2f, 0.3f, 0.8f, 1.0f };
+	glm::vec4 colorRed = { 0.8f, 0.2f, 0.3f, 1.0f };
 };
 
 class Sandbox : public Holt::Application
