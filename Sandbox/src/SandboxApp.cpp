@@ -18,7 +18,7 @@ public:
 			 0.0f,  0.9f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		std::shared_ptr<Holt::VertexBuffer> triangleVertexBuffer;
+		Holt::Ref<Holt::VertexBuffer> triangleVertexBuffer;
 		triangleVertexBuffer.reset(Holt::VertexBuffer::Create(triangleVertices, sizeof(triangleVertices)));
 
 		Holt::BufferLayout layout = {
@@ -30,7 +30,7 @@ public:
 		m_VertexArray->AddVertexBuffer(triangleVertexBuffer);
 
 		uint32_t triangleIndices[3] = { 0, 1, 2 };
-		std::shared_ptr<Holt::IndexBuffer> triangleIndexBuffer;
+		Holt::Ref<Holt::IndexBuffer> triangleIndexBuffer;
 		triangleIndexBuffer.reset(Holt::IndexBuffer::Create(triangleIndices, sizeof(triangleIndices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(triangleIndexBuffer);
 
@@ -81,7 +81,7 @@ public:
 			-0.5f,  0.5f, 0.0f
 		};
 
-		std::shared_ptr<Holt::VertexBuffer> squareVertexBuffer;
+		Holt::Ref<Holt::VertexBuffer> squareVertexBuffer;
 		squareVertexBuffer.reset(Holt::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVertexBuffer->SetLayout({
 			{ Holt::ShaderDataType::Float3, "a_Position" }
@@ -89,7 +89,7 @@ public:
 		m_SquareVertexArray->AddVertexBuffer(squareVertexBuffer);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Holt::IndexBuffer> squareIndexBuffer;
+		Holt::Ref<Holt::IndexBuffer> squareIndexBuffer;
 		squareIndexBuffer.reset(Holt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVertexArray->SetIndexBuffer(squareIndexBuffer);
 
@@ -270,11 +270,11 @@ public:
 	}
 
 private:
-	std::shared_ptr<Holt::Shader> m_Shader;
-	std::shared_ptr<Holt::VertexArray> m_VertexArray;
+	Holt::Ref<Holt::Shader> m_Shader;
+	Holt::Ref<Holt::VertexArray> m_VertexArray;
 
-	std::shared_ptr<Holt::Shader> m_FlatShader;
-	std::shared_ptr<Holt::VertexArray> m_SquareVertexArray;
+	Holt::Ref<Holt::Shader> m_FlatShader;
+	Holt::Ref<Holt::VertexArray> m_SquareVertexArray;
 
 	///
 	float m_Scale = 0.1f;
