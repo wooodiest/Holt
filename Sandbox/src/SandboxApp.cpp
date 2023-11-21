@@ -7,14 +7,14 @@ class ExampleLayer : public Holt::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_TriangleTransform(0.0f)
+		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_ScaleV(0.1f), m_CameraPosition(0.0f), m_TriangleTransform(0.0f)
 	{
 		m_VertexArray.reset(Holt::VertexArray::Create());
 
 		float triangleVertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+			-0.9f, -0.9f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			 0.9f, -0.9f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			 0.0f,  0.9f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
 		std::shared_ptr<Holt::VertexBuffer> triangleVertexBuffer;
@@ -167,15 +167,15 @@ public:
 
 		///
 
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_ScaleV);
 		
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
 			{
-				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::vec3 pos(x * 1.1f * m_Scale, y * 1.1f * m_Scale, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				if (x % 2 == 0)
+				if ((x+y) % 2 == 0)
 					m_FlatShader->UploadUniformFloat4("u_Color", colorBlue);
 				else
 					m_FlatShader->UploadUniformFloat4("u_Color", colorRed);
@@ -183,8 +183,7 @@ public:
 				Holt::Renderer::Submit(m_FlatShader, m_SquareVertexArray, transform);
 			}
 		}
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_TriangleTransform);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_TriangleTransform) * scale;
 		Holt::Renderer::Submit(m_Shader, m_VertexArray, transform);
 		
 		// End
@@ -195,16 +194,74 @@ public:
 	virtual void OnImGuiRender() override
 	{
 		ImGui::Begin("Test");
-		
+		///
+		ImGui::SeparatorText("Display");
+		if (ImGui::DragFloat("Scale", &m_Scale, 0.01f))
+		{
+			m_ScaleV.x = m_Scale;
+			m_ScaleV.y = m_Scale;
+		}
+		if (ImGui::Button("Reset   "))
+		{
+			m_Scale = 0.1f;
+			m_ScaleV.x = 0.1f;
+			m_ScaleV.y = 0.1f;
+		}
+		///
+		ImGui::SeparatorText("Camera");
+		ImGui::DragFloat2("Position", &m_CameraPosition.x, 0.01f);
+		ImGui::DragFloat("Speed", &m_CameraMoveSpeed, 0.1f);
+		ImGui::DragFloat("Rotation", &m_CameraRotation, 0.1f);
+		ImGui::DragFloat("Rotation speed", &m_CameraRotationSpeed, 1.0f);
+		if (ImGui::Button("Reset"))
+		{
+			m_CameraPosition = glm::vec3(0.0f);
+			m_CameraMoveSpeed = 5.0f;
+
+			m_CameraRotation = 0.0f;
+			m_CameraRotationSpeed = 180.0f;
+		}
+		///
+		ImGui::SeparatorText("Triangle");
+		ImGui::DragFloat2("Position ", &m_TriangleTransform.x, 0.01f);
+		ImGui::DragFloat("Speed ", &m_TriangleTransformSpeed, 0.1f);
+		if (ImGui::Button("Reset "))
+		{
+			m_TriangleTransform = glm::vec3(0.0f);
+			m_TriangleTransformSpeed = 1.0f;
+		}
+		///
+		ImGui::SeparatorText("Grid");
+
 		ImGui::ColorPicker4("Color - 1", &colorBlue.r);
 		ImGui::ColorPicker4("Color - 2", &colorRed.r);
-
+		if (ImGui::Button("Reset  "))
+		{
+			colorBlue = { 0.2f, 0.3f, 0.8f, 1.0f };
+			colorRed = { 0.8f, 0.2f, 0.3f, 1.0f };
+		}
+		///
 		ImGui::End();
 	}
 
 	virtual void OnEvent(Holt::Event& event) override
 	{
-
+		if (event.GetEventType() == Holt::EventType::MouseScrolled)
+		{
+			Holt::MouseScrolledEvent& e = (Holt::MouseScrolledEvent&)event;
+			if (e.GetYOffset() == 1)
+			{
+				m_Scale *= 1.1f;
+				m_ScaleV.x = m_Scale;
+				m_ScaleV.y = m_Scale;
+			}
+			else if (e.GetYOffset() == -1)
+			{
+				m_Scale *= 0.9f;
+				m_ScaleV.x = m_Scale;
+				m_ScaleV.y = m_Scale;
+			}
+		}
 	}
 
 private:
@@ -215,6 +272,8 @@ private:
 	std::shared_ptr<Holt::VertexArray> m_SquareVertexArray;
 
 	///
+	float m_Scale = 0.1f;
+	glm::vec3 m_ScaleV;
 
 	Holt::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
