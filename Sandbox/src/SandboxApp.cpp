@@ -2,6 +2,7 @@
 
 #include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "Platform/OpenGL/OpenGLShader.h"
 
 class ExampleLayer : public Holt::Layer
 {
@@ -67,7 +68,7 @@ public:
 				color = v_Color;
 			}
 		)";
-		m_Shader.reset(new Holt::Shader("ExampleShader", vertexSrc, fragmentSrc));
+		m_Shader.reset(Holt::Shader::Create("ExampleShader", vertexSrc, fragmentSrc));
 
 		/// Square
 
@@ -123,7 +124,7 @@ public:
 				color = u_Color;
 			}
 		)";
-		m_FlatShader.reset(new Holt::Shader("BlueShader", vertexSrcBlue, fragmentSrcFlat));
+		m_FlatShader.reset(Holt::Shader::Create("BlueShader", vertexSrcBlue, fragmentSrcFlat));
 		
 	}
 
@@ -168,17 +169,19 @@ public:
 		///
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_ScaleV);
-		
-		for (int y = 0; y < 20; y++)
+		auto flatShader = std::dynamic_pointer_cast<Holt::OpenGLShader>(m_FlatShader);
+		flatShader->Bind();
+
+		for (int y = -15; y < 15; y++)
 		{
-			for (int x = 0; x < 20; x++)
+			for (int x = -15; x < 15; x++)
 			{
 				glm::vec3 pos(x * 1.1f * m_Scale, y * 1.1f * m_Scale, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				if ((x+y) % 2 == 0)
-					m_FlatShader->UploadUniformFloat4("u_Color", colorBlue);
+					flatShader->UploadUniformFloat4("u_Color", colorBlue);
 				else
-					m_FlatShader->UploadUniformFloat4("u_Color", colorRed);
+					flatShader->UploadUniformFloat4("u_Color", colorRed);
 
 				Holt::Renderer::Submit(m_FlatShader, m_SquareVertexArray, transform);
 			}
@@ -194,6 +197,9 @@ public:
 	virtual void OnImGuiRender() override
 	{
 		ImGui::Begin("Test");
+		///
+		ImGuiIO& io = ImGui::GetIO();
+		ImGui::Text("FPS: %.1f", io.Framerate);
 		///
 		ImGui::SeparatorText("Display");
 		if (ImGui::DragFloat("Scale", &m_Scale, 0.01f))
@@ -232,9 +238,8 @@ public:
 		}
 		///
 		ImGui::SeparatorText("Grid");
-
-		ImGui::ColorPicker4("Color - 1", &colorBlue.r);
-		ImGui::ColorPicker4("Color - 2", &colorRed.r);
+		ImGui::ColorEdit4("Color - 1", &colorBlue.r);
+		ImGui::ColorEdit4("Color - 2", &colorRed.r);
 		if (ImGui::Button("Reset  "))
 		{
 			colorBlue = { 0.2f, 0.3f, 0.8f, 1.0f };

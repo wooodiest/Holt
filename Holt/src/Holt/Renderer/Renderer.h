@@ -3,7 +3,7 @@
 #include "RenderCommand.h"
 
 #include "OrthographicCamera.h"
-#include "Shader.h" // temporary
+#include "Shader.h"
 
 
 namespace Holt {
