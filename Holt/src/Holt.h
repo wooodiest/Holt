@@ -20,6 +20,7 @@
 		
 #include "Holt/Renderer/Buffer.h"
 #include "Holt/Renderer/Shader.h"
+#include "Holt/Renderer/Texture.h"
 #include "Holt/Renderer/VertexArray.h"
 	
 #include "Holt/Renderer/OrthographicCamera.h"

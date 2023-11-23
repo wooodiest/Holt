@@ -10,7 +10,7 @@ public:
 	ExampleLayer()
 		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_ScaleV(0.1f), m_CameraPosition(0.0f), m_TriangleTransform(0.0f)
 	{
-		m_VertexArray.reset(Holt::VertexArray::Create());
+		m_VertexArray = Holt::VertexArray::Create();
 
 		float triangleVertices[3 * 7] = {
 			-0.9f, -0.9f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -19,7 +19,7 @@ public:
 		};
 
 		Holt::Ref<Holt::VertexBuffer> triangleVertexBuffer;
-		triangleVertexBuffer.reset(Holt::VertexBuffer::Create(triangleVertices, sizeof(triangleVertices)));
+		triangleVertexBuffer = Holt::VertexBuffer::Create(triangleVertices, sizeof(triangleVertices));
 
 		Holt::BufferLayout layout = {
 			{ Holt::ShaderDataType::Float3, "a_Position" },
@@ -31,7 +31,7 @@ public:
 
 		uint32_t triangleIndices[3] = { 0, 1, 2 };
 		Holt::Ref<Holt::IndexBuffer> triangleIndexBuffer;
-		triangleIndexBuffer.reset(Holt::IndexBuffer::Create(triangleIndices, sizeof(triangleIndices) / sizeof(uint32_t)));
+		triangleIndexBuffer = Holt::IndexBuffer::Create(triangleIndices, sizeof(triangleIndices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(triangleIndexBuffer);
 
 		std::string vertexSrc = R"(
@@ -68,29 +68,30 @@ public:
 				color = v_Color;
 			}
 		)";
-		m_Shader.reset(Holt::Shader::Create("ExampleShader", vertexSrc, fragmentSrc));
+		m_Shader = Holt::Shader::Create("ExampleShader", vertexSrc, fragmentSrc);
 
 		/// Square
 
-		m_SquareVertexArray.reset(Holt::VertexArray::Create());
+		m_SquareVertexArray = Holt::VertexArray::Create();
 
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		Holt::Ref<Holt::VertexBuffer> squareVertexBuffer;
-		squareVertexBuffer.reset(Holt::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		squareVertexBuffer = Holt::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVertexBuffer->SetLayout({
-			{ Holt::ShaderDataType::Float3, "a_Position" }
+			{ Holt::ShaderDataType::Float3, "a_Position" },
+			{ Holt::ShaderDataType::Float2, "a_TexCoord" }
 			});
 		m_SquareVertexArray->AddVertexBuffer(squareVertexBuffer);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
 		Holt::Ref<Holt::IndexBuffer> squareIndexBuffer;
-		squareIndexBuffer.reset(Holt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		squareIndexBuffer = Holt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVertexArray->SetIndexBuffer(squareIndexBuffer);
 
 		std::string vertexSrcBlue = R"(
@@ -101,11 +102,8 @@ public:
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
 
-			out vec3 v_Position;
-
 			void main()
 			{
-				v_Position = a_Position;
 				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
@@ -116,16 +114,55 @@ public:
 			layout(location = 0) out vec4 color;
 			
 			uniform vec4 u_Color;
-			
-			in vec3 v_Position;
 
 			void main()
 			{
 				color = u_Color;
 			}
 		)";
-		m_FlatShader.reset(Holt::Shader::Create("BlueShader", vertexSrcBlue, fragmentSrcFlat));
+		m_FlatShader = Holt::Shader::Create("BlueShader", vertexSrcBlue, fragmentSrcFlat);
 		
+		/// Texture
+
+		std::string textureVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+				
+			out vec2 v_TexCoord;			
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string textureFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			
+			uniform vec4 u_Color;
+				
+			in vec2 v_TexCoord;
+			uniform sampler2D u_Texture;
+			
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader = Holt::Shader::Create("TextureShader", textureVertexSrc, textureFragmentSrc);
+		m_Texture = Holt::Texture2D::Create("assets/textures/Checkerboard.png");
+
+		std::dynamic_pointer_cast<Holt::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Holt::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	virtual void OnUpdate(Holt::Timestep ts) override
@@ -167,7 +204,7 @@ public:
 		Holt::Renderer::BeginScene(m_Camera);
 
 		///
-
+		// Grid
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_ScaleV);
 		auto flatShader = std::dynamic_pointer_cast<Holt::OpenGLShader>(m_FlatShader);
 		flatShader->Bind();
@@ -186,9 +223,17 @@ public:
 				Holt::Renderer::Submit(m_FlatShader, m_SquareVertexArray, transform);
 			}
 		}
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_TriangleTransform) * scale;
+		// Texture
+		scale = glm::scale(glm::mat4(1.0f), m_ScaleV * 10.0f);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }) * scale;
+		m_Texture->Bind();
+		Holt::Renderer::Submit(m_TextureShader, m_SquareVertexArray, transform);
+
+		// Triangle
+		scale = glm::scale(glm::mat4(1.0f), m_ScaleV);
+		transform = glm::translate(glm::mat4(1.0f), m_TriangleTransform) * scale;
 		Holt::Renderer::Submit(m_Shader, m_VertexArray, transform);
-		
+
 		// End
 
 		Holt::Renderer::EndScene();
@@ -275,6 +320,9 @@ private:
 
 	Holt::Ref<Holt::Shader> m_FlatShader;
 	Holt::Ref<Holt::VertexArray> m_SquareVertexArray;
+
+	Holt::Ref<Holt::Shader> m_TextureShader;
+	Holt::Ref<Holt::Texture2D> m_Texture;
 
 	///
 	float m_Scale = 0.1f;
