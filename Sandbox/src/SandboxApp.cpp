@@ -13,9 +13,9 @@ public:
 		m_VertexArray = Holt::VertexArray::Create();
 
 		float triangleVertices[3 * 7] = {
-			-0.9f, -0.9f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			 0.9f, -0.9f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			 0.0f,  0.9f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+			-0.9f, -0.9f, 0.0f, 0.8f, 0.2f, 0.8f, 0.7f,
+			 0.9f, -0.9f, 0.0f, 0.2f, 0.3f, 0.8f, 0.7f,
+			 0.0f,  0.9f, 0.0f, 0.8f, 0.8f, 0.2f, 0.7f
 		};
 
 		Holt::Ref<Holt::VertexBuffer> triangleVertexBuffer;
@@ -64,7 +64,6 @@ public:
 
 			void main()
 			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
 				color = v_Color;
 			}
 		)";
