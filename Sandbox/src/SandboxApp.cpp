@@ -34,7 +34,7 @@ public:
 		triangleIndexBuffer = Holt::IndexBuffer::Create(triangleIndices, sizeof(triangleIndices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(triangleIndexBuffer);
 
-		m_Shader = Holt::Shader::Create("assets/shaders/Example.glsl");
+		m_ShaderLibrary.Load("assets/shaders/Example.glsl");
 
 		/// Square
 
@@ -60,14 +60,14 @@ public:
 		squareIndexBuffer = Holt::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVertexArray->SetIndexBuffer(squareIndexBuffer);
 
-		m_FlatShader = Holt::Shader::Create("assets/shaders/Flat.glsl");
+		m_ShaderLibrary.Load("assets/shaders/Flat.glsl");
 		
 		/// Texture
-		m_TextureShader = Holt::Shader::Create("assets/shaders/Texture.glsl");
+		m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		m_Texture = Holt::Texture2D::Create("assets/textures/Checkerboard.png");
 
-		std::dynamic_pointer_cast<Holt::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Holt::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Holt::OpenGLShader>(m_ShaderLibrary.Get("Example"))->Bind();
+		std::dynamic_pointer_cast<Holt::OpenGLShader>(m_ShaderLibrary.Get("Example"))->UploadUniformInt("u_Texture", 0);
 	}
 
 	virtual void OnUpdate(Holt::Timestep ts) override
@@ -111,7 +111,7 @@ public:
 		///
 		// Grid
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_ScaleV);
-		auto flatShader = std::dynamic_pointer_cast<Holt::OpenGLShader>(m_FlatShader);
+		auto flatShader = std::dynamic_pointer_cast<Holt::OpenGLShader>(m_ShaderLibrary.Get("Flat"));
 		flatShader->Bind();
 
 		for (int y = -15; y < 15; y++)
@@ -125,19 +125,19 @@ public:
 				else
 					flatShader->UploadUniformFloat4("u_Color", colorRed);
 
-				Holt::Renderer::Submit(m_FlatShader, m_SquareVertexArray, transform);
+				Holt::Renderer::Submit(m_ShaderLibrary.Get("Flat"), m_SquareVertexArray, transform);
 			}
 		}
 		// Texture
 		scale = glm::scale(glm::mat4(1.0f), m_ScaleV * 10.0f);
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }) * scale;
 		m_Texture->Bind();
-		Holt::Renderer::Submit(m_TextureShader, m_SquareVertexArray, transform);
+		Holt::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, transform);
 
 		// Triangle
 		scale = glm::scale(glm::mat4(1.0f), m_ScaleV);
 		transform = glm::translate(glm::mat4(1.0f), m_TriangleTransform) * scale;
-		Holt::Renderer::Submit(m_Shader, m_VertexArray, transform);
+		Holt::Renderer::Submit(m_ShaderLibrary.Get("Example"), m_VertexArray, transform);
 
 		// End
 
@@ -220,13 +220,10 @@ public:
 	}
 
 private:
-	Holt::Ref<Holt::Shader> m_Shader;
+	Holt::ShaderLibrary m_ShaderLibrary; // Later will be owned by renderer
+	
 	Holt::Ref<Holt::VertexArray> m_VertexArray;
-
-	Holt::Ref<Holt::Shader> m_FlatShader;
 	Holt::Ref<Holt::VertexArray> m_SquareVertexArray;
-
-	Holt::Ref<Holt::Shader> m_TextureShader;
 	Holt::Ref<Holt::Texture2D> m_Texture;
 
 	///
