@@ -9,6 +9,7 @@
 #include "Holt/Core/Input.h"
 #include "Holt/Core/KeyCodes.h"
 #include "Holt/Core/MouseButtonCodes.h"
+#include "Holt/Renderer/OrthographicCameraController.h"
 
 #include "Holt/ImGui/ImGuiLayer.h"
 #include "Holt/Core/Timestep.h"

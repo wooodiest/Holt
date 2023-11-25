@@ -8,7 +8,7 @@ class ExampleLayer : public Holt::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_ScaleV(0.1f), m_CameraPosition(0.0f), m_TriangleTransform(0.0f)
+		: Layer("Example"), m_CameraController(1600.0f / 900.0f, true)
 	{
 		m_VertexArray = Holt::VertexArray::Create();
 
@@ -72,23 +72,13 @@ public:
 
 	virtual void OnUpdate(Holt::Timestep ts) override
 	{
-		// Camera
-		if (Holt::Input::IsKeyPressed(HL_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-		else if (Holt::Input::IsKeyPressed(HL_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraMoveSpeed * ts;
+		// Update
+		m_CameraController.OnUpdate(ts);
 
-		if (Holt::Input::IsKeyPressed(HL_KEY_UP))
-			m_CameraPosition.y += m_CameraMoveSpeed * ts;
-		else if (Holt::Input::IsKeyPressed(HL_KEY_DOWN))
-			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
+		// - Triangle transform
+		static glm::vec3 m_TriangleTransform(0.0f);
+		static float m_TriangleTransformSpeed = 1.0f;
 
-		if (Holt::Input::IsKeyPressed(HL_KEY_A))
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		else if (Holt::Input::IsKeyPressed(HL_KEY_D))
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-
-		// Triangle transform
 		if (Holt::Input::IsKeyPressed(HL_KEY_J))
 			m_TriangleTransform.x -= m_TriangleTransformSpeed * ts;
 		else if (Holt::Input::IsKeyPressed(HL_KEY_L))
@@ -99,18 +89,14 @@ public:
 		else if (Holt::Input::IsKeyPressed(HL_KEY_K))
 			m_TriangleTransform.y -= m_TriangleTransformSpeed * ts;
 
-		/// Begin
+		/// Render
 		Holt::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Holt::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
+		Holt::Renderer::BeginScene(m_CameraController.GetCamera());
 
-		Holt::Renderer::BeginScene(m_Camera);
-
-		///
-		// Grid
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_ScaleV);
+		// -  Grid
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 		auto flatShader = std::dynamic_pointer_cast<Holt::OpenGLShader>(m_ShaderLibrary.Get("Flat"));
 		flatShader->Bind();
 
@@ -118,28 +104,26 @@ public:
 		{
 			for (int x = -15; x < 15; x++)
 			{
-				glm::vec3 pos(x * 1.1f * m_Scale, y * 1.1f * m_Scale, 0.0f);
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				if ((x+y) % 2 == 0)
-					flatShader->UploadUniformFloat4("u_Color", colorBlue);
+					flatShader->UploadUniformFloat4("u_Color", color1);
 				else
-					flatShader->UploadUniformFloat4("u_Color", colorRed);
+					flatShader->UploadUniformFloat4("u_Color", color2);
 
 				Holt::Renderer::Submit(m_ShaderLibrary.Get("Flat"), m_SquareVertexArray, transform);
 			}
 		}
-		// Texture
-		scale = glm::scale(glm::mat4(1.0f), m_ScaleV * 10.0f);
+		// - Texture
+		scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }) * scale;
 		m_Texture->Bind();
 		Holt::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, transform);
 
-		// Triangle
-		scale = glm::scale(glm::mat4(1.0f), m_ScaleV);
+		//  - Triangle
+		scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.15f));
 		transform = glm::translate(glm::mat4(1.0f), m_TriangleTransform) * scale;
 		Holt::Renderer::Submit(m_ShaderLibrary.Get("Example"), m_VertexArray, transform);
-
-		// End
 
 		Holt::Renderer::EndScene();
 	}
@@ -147,76 +131,19 @@ public:
 	virtual void OnImGuiRender() override
 	{
 		ImGui::Begin("Test");
-		///
+		
 		ImGuiIO& io = ImGui::GetIO();
 		ImGui::Text("FPS: %.1f", io.Framerate);
-		///
-		ImGui::SeparatorText("Display");
-		if (ImGui::DragFloat("Scale", &m_Scale, 0.01f))
-		{
-			m_ScaleV.x = m_Scale;
-			m_ScaleV.y = m_Scale;
-		}
-		if (ImGui::Button("Reset   "))
-		{
-			m_Scale = 0.1f;
-			m_ScaleV.x = 0.1f;
-			m_ScaleV.y = 0.1f;
-		}
-		///
-		ImGui::SeparatorText("Camera");
-		ImGui::DragFloat2("Position", &m_CameraPosition.x, 0.01f);
-		ImGui::DragFloat("Speed", &m_CameraMoveSpeed, 0.1f);
-		ImGui::DragFloat("Rotation", &m_CameraRotation, 0.1f);
-		ImGui::DragFloat("Rotation speed", &m_CameraRotationSpeed, 1.0f);
-		if (ImGui::Button("Reset"))
-		{
-			m_CameraPosition = glm::vec3(0.0f);
-			m_CameraMoveSpeed = 5.0f;
-
-			m_CameraRotation = 0.0f;
-			m_CameraRotationSpeed = 180.0f;
-		}
-		///
-		ImGui::SeparatorText("Triangle");
-		ImGui::DragFloat2("Position ", &m_TriangleTransform.x, 0.01f);
-		ImGui::DragFloat("Speed ", &m_TriangleTransformSpeed, 0.1f);
-		if (ImGui::Button("Reset "))
-		{
-			m_TriangleTransform = glm::vec3(0.0f);
-			m_TriangleTransformSpeed = 1.0f;
-		}
-		///
-		ImGui::SeparatorText("Grid");
-		ImGui::ColorEdit4("Color - 1", &colorBlue.r);
-		ImGui::ColorEdit4("Color - 2", &colorRed.r);
-		if (ImGui::Button("Reset  "))
-		{
-			colorBlue = { 0.2f, 0.3f, 0.8f, 1.0f };
-			colorRed = { 0.8f, 0.2f, 0.3f, 1.0f };
-		}
-		///
+		
+		ImGui::ColorEdit4("Color - 1", &color1.r);
+		ImGui::ColorEdit4("Color - 2", &color2.r);
+	
 		ImGui::End();
 	}
 
-	virtual void OnEvent(Holt::Event& event) override
+	virtual void OnEvent(Holt::Event& e) override
 	{
-		if (event.GetEventType() == Holt::EventType::MouseScrolled)
-		{
-			Holt::MouseScrolledEvent& e = (Holt::MouseScrolledEvent&)event;
-			if (e.GetYOffset() == 1)
-			{
-				m_Scale *= 1.1f;
-				m_ScaleV.x = m_Scale;
-				m_ScaleV.y = m_Scale;
-			}
-			else if (e.GetYOffset() == -1)
-			{
-				m_Scale *= 0.9f;
-				m_ScaleV.x = m_Scale;
-				m_ScaleV.y = m_Scale;
-			}
-		}
+		m_CameraController.OnEvent(e);
 	}
 
 private:
@@ -226,23 +153,10 @@ private:
 	Holt::Ref<Holt::VertexArray> m_SquareVertexArray;
 	Holt::Ref<Holt::Texture2D> m_Texture;
 
-	///
-	float m_Scale = 0.1f;
-	glm::vec3 m_ScaleV;
+	Holt::OrthographicCameraController m_CameraController;
 
-	Holt::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 5.0f;
-
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 180.0f;
-
-	///
-	glm::vec3 m_TriangleTransform;
-	float m_TriangleTransformSpeed = 1.0f;
-
-	glm::vec4 colorBlue = { 0.2f, 0.3f, 0.8f, 1.0f };
-	glm::vec4 colorRed = { 0.8f, 0.2f, 0.3f, 1.0f };
+	glm::vec4 color1 = { 0.2f, 0.3f, 0.8f, 1.0f };
+	glm::vec4 color2 = { 0.8f, 0.2f, 0.3f, 1.0f };
 };
 
 class Sandbox : public Holt::Application
