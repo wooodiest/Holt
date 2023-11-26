@@ -25,6 +25,13 @@ namespace Holt {
 		HL_CORE_INFO("Renderer: {0}",   (char*)glGetString(GL_RENDERER));
 		HL_CORE_INFO("Version:  {0}",   (char*)glGetString(GL_VERSION));
 		HL_CORE_INFO("Shading:  {0}\n", (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+#ifdef HL_ENABLE_ASSERTS
+		int versionMajor, versionMinor;
+		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
+		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
+		HL_CORE_ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5), "Holt requires at least OpenGL version 4.5!");
+#endif
 	}
 
 	void OpenGLContext::SwapBuffers()

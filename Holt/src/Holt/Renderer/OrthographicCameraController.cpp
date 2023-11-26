@@ -4,6 +4,8 @@
 #include "Holt/Core/Input.h"
 #include "Holt/Core/KeyCodes.h"
 
+#define ORTHOGRAPHIC_CAMERA_CONTROLLER_INDEPENDENT // Camera movement independent of rotation (for example if rotated pressing d still rotates the camera to the right)
+
 namespace Holt {
 
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
@@ -14,6 +16,44 @@ namespace Holt {
 
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
+#ifdef ORTHOGRAPHIC_CAMERA_CONTROLLER_INDEPENDENT
+		if (Input::IsKeyPressed(HL_KEY_A))
+		{
+			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
+			m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
+		}
+		else if (Input::IsKeyPressed(HL_KEY_D))
+		{
+			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
+			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
+		}
+
+		if (Input::IsKeyPressed(HL_KEY_W))
+		{
+			m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
+			m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
+		}
+		else if (Input::IsKeyPressed(HL_KEY_S))
+		{
+			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
+			m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
+		}
+
+		if (m_Rotation)
+		{
+			if (Input::IsKeyPressed(HL_KEY_Q))
+				m_CameraRotation += m_CameraRotationSpeed * ts;
+			else if (Input::IsKeyPressed(HL_KEY_E))
+				m_CameraRotation -= m_CameraRotationSpeed * ts;
+
+			if (m_CameraRotation > 180.0f)
+				m_CameraRotation -= 360.0f;
+			else if (m_CameraRotation <= -180.0f)
+				m_CameraRotation += 360.0f;
+
+			m_Camera.SetRotation(m_CameraRotation);
+		}
+#else
 		if (Input::IsKeyPressed(HL_KEY_A))
 			m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
 		else if (Input::IsKeyPressed(HL_KEY_D))
@@ -28,12 +68,12 @@ namespace Holt {
 		{
 			if (Input::IsKeyPressed(HL_KEY_Q))
 				m_CameraRotation += m_CameraRotationSpeed * ts;
-			if (Input::IsKeyPressed(HL_KEY_E))
+			else if (Input::IsKeyPressed(HL_KEY_E))
 				m_CameraRotation -= m_CameraRotationSpeed * ts;
 
 			m_Camera.SetRotation(m_CameraRotation);
 		}
-
+#endif
 		m_Camera.SetPosition(m_CameraPosition);
 
 		m_CameraTranslationSpeed = m_ZoomLevel;

@@ -1,15 +1,14 @@
 project "Holt"
-	location "Holt"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
     staticruntime "on"
 
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+    targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "hlpch.h"
-	pchsource "Holt/src/hlpch.cpp"
+	pchsource "src/hlpch.cpp"
 
 	files
     {
@@ -30,11 +29,11 @@ project "Holt"
     {
 		"src",
 		"vendor/spdlog/include",
-		"vendor/GLFW/include",
-		"vendor/Glad/include",
-		"vendor/imgui",
-		"vendor/glm",
-		"vendor/stb_image"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}",
 	}
 
 	links
@@ -50,7 +49,6 @@ project "Holt"
 
 		defines
         {
-            "HL_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE"
         }
 

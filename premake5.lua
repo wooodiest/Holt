@@ -1,3 +1,5 @@
+include "Dependencies.lua"
+
 workspace "Holt"
 	architecture "x64"
 	startproject "Sandbox"
@@ -22,6 +24,8 @@ group "Dependencies"
 	include "Holt/vendor/imgui"
 group ""
 
+include "Holt"
+include "Sandbox"
 
 
 

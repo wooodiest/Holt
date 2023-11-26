@@ -1,12 +1,11 @@
 project "Sandbox"
-	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files
 	{
@@ -16,10 +15,10 @@ project "Sandbox"
 
 	includedirs
 	{
-		"../Holt/src",
-		"../Holt/vendor/spdlog/include",
-		"../Holt/vendor",
-		"../Holt/vendor/glm"
+		"%{wks.location}/Holt/vendor/spdlog/include",
+		"%{wks.location}/Holt/src",
+		"%{wks.location}/Holt/vendor",
+		"%{IncludeDir.glm}",
 	}
 
 	links
@@ -29,11 +28,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		systemversion "latest"
-
-		defines
-		{
-			"HL_PLATFORM_WINDOWS"
-		}
 
 	filter "configurations:Debug"
 		defines "HL_DEBUG"
