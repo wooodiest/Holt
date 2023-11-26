@@ -26,6 +26,3 @@
 	
 #include "Holt/Renderer/OrthographicCamera.h"
 
-// ---Entry Point---------------------
-#include "Holt/Core/EntryPoint.h"
-// -----------------------------------
