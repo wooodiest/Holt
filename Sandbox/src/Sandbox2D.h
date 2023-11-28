@@ -14,8 +14,7 @@ public:
 	virtual void OnEvent(Holt::Event& event) override;
 private:
 	Holt::OrthographicCameraController m_CameraController;
-	Holt::Ref<Holt::VertexArray> m_VertexArray;
-	Holt::Ref<Holt::Shader> m_Shader;
-	glm::vec4 m_Color = { 0.2f, 0.3f, 0.8f, 1.0f };
+	glm::vec4 m_Color1 = { 0.8f, 0.2f, 0.3f, 1.0f };
+	glm::vec4 m_Color2 = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 };

@@ -17,6 +17,7 @@
 // ---Renderer------------------------
 
 #include "Holt/Renderer/Renderer.h"
+#include "Holt/Renderer/Renderer2D.h"
 #include "Holt/Renderer/RenderCommand.h"
 		
 #include "Holt/Renderer/Buffer.h"
