@@ -14,6 +14,7 @@ namespace Holt {
 	{
 		Ref<VertexArray> _VertexArray;
 		Ref<Shader>      _Shader;
+		Ref<Shader>      _TextureShader;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -22,15 +23,16 @@ namespace Holt {
 	{
 		s_Data = new Renderer2DStorage();
 		s_Data->_VertexArray = VertexArray::Create();
-		float verticies[4 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float verticies[7 * 3] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		auto vertexBuffur = Holt::VertexBuffer::Create(verticies, sizeof(verticies));
 		Holt::BufferLayout layout = {
-			{ Holt::ShaderDataType::Float3, "a_Position" }
+			{ Holt::ShaderDataType::Float3, "a_Position" },
+			{ Holt::ShaderDataType::Float2, "a_TexCoord" }
 		};
 		vertexBuffur->SetLayout(layout);
 		s_Data->_VertexArray->AddVertexBuffer(vertexBuffur);
@@ -38,6 +40,9 @@ namespace Holt {
 		auto indexBuffer = Holt::IndexBuffer::Create(indicies, sizeof(indicies) / sizeof(uint32_t));
 		s_Data->_VertexArray->SetIndexBuffer(indexBuffer);
 		s_Data->_Shader = Holt::Shader::Create("assets/shaders/Flat.glsl");
+		s_Data->_TextureShader = Holt::Shader::Create("assets/shaders/Texture.glsl");
+		s_Data->_TextureShader->Bind();
+		s_Data->_TextureShader->SetInt("u_Texture", 0);
 	}
 
 	void Renderer2D::Shutdown()
@@ -50,6 +55,9 @@ namespace Holt {
 		s_Data->_Shader->Bind();
 		s_Data->_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 		s_Data->_Shader->SetMat4("u_Transform", glm::mat4(1.0f));
+
+		s_Data->_TextureShader->Bind();
+		s_Data->_TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
@@ -70,6 +78,24 @@ namespace Holt {
 		s_Data->_Shader->SetMat4("u_Transform", transform);
 
 		s_Data->_VertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->_VertexArray);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture)
+	{
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
+	{
+		s_Data->_TextureShader->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->_TextureShader->SetMat4("u_Transform", transform);
+
+		texture->Bind();
+
+		s_Data->_TextureShader->Bind();
 		RenderCommand::DrawIndexed(s_Data->_VertexArray);
 	}
 

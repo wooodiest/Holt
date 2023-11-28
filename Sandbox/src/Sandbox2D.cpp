@@ -14,6 +14,7 @@ Sandbox2D::~Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+	m_CheckerboardTexture = Holt::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::OnDetach()
@@ -33,6 +34,7 @@ void Sandbox2D::OnUpdate(Holt::Timestep ts)
 	
 	Holt::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, m_Color1);
 	Holt::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, m_Color2);
+	Holt::Renderer2D::DrawQuad({ 0.0f, -0.0f, -0.1f}, { 5.0f, 5.0f }, m_CheckerboardTexture);
 
 	Holt::Renderer2D::EndScene();
 }
