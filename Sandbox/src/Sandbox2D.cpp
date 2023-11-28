@@ -2,7 +2,6 @@
 
 #include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include "Platform/OpenGL/OpenGLShader.h"
 
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(1600.0f / 900.0f, true)
@@ -50,8 +49,9 @@ void Sandbox2D::OnUpdate(Holt::Timestep ts)
 
 	Holt::Renderer::BeginScene(m_CameraController.GetCamera());
 	
-	std::dynamic_pointer_cast<Holt::OpenGLShader>(m_Shader)->Bind();
-	std::dynamic_pointer_cast<Holt::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_Color);
+	m_Shader->Bind();
+	m_Shader->SetFloat4("u_Color", m_Color);
+
 	Holt::Renderer::Submit(m_Shader, m_VertexArray, glm::translate(glm::mat4(1.0f), {0.0f, 0.0f, 0.0f}));
 
 	Holt::Renderer::EndScene();

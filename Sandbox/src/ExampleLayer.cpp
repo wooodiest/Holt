@@ -2,7 +2,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include "imgui/imgui.h"
-#include "Platform/OpenGL/OpenGLShader.h" // To remove
 
 ExampleLayer::ExampleLayer()
 	: Layer("ExampleLayer"), m_CameraController(1600.0f / 900.0f, true)
@@ -49,8 +48,8 @@ ExampleLayer::ExampleLayer()
 	m_ShaderLibrary.Load("assets/shaders/Flat.glsl");
 	m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 	m_CheckerboardTexture = Holt::Texture2D::Create("assets/textures/Checkerboard.png");
-	std::dynamic_pointer_cast<Holt::OpenGLShader>(m_ShaderLibrary.Get("Texture"))->Bind();
-	std::dynamic_pointer_cast<Holt::OpenGLShader>(m_ShaderLibrary.Get("Texture"))->UploadUniformInt("u_Texture", 0);
+	m_ShaderLibrary.Get("Texture")->Bind();
+	m_ShaderLibrary.Get("Texture")->SetInt("u_Texture", 0);
 }
 
 void ExampleLayer::OnAttach()
@@ -87,7 +86,7 @@ void ExampleLayer::OnUpdate(Holt::Timestep ts)
 	Holt::Renderer::BeginScene(m_CameraController.GetCamera());
 
 	// - Grid - //
-	auto flatShader = std::dynamic_pointer_cast<Holt::OpenGLShader>(m_ShaderLibrary.Get("Flat"));
+	auto flatShader = m_ShaderLibrary.Get("Flat");
 	flatShader->Bind();
 	for (int y = -15; y < 15; y++)
 	{
@@ -96,11 +95,11 @@ void ExampleLayer::OnUpdate(Holt::Timestep ts)
 			glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 			if ((x + y) % 2 == 0)
-				flatShader->UploadUniformFloat4("u_Color", color1);
+				flatShader->SetFloat4("u_Color", color1);
 			else
-				flatShader->UploadUniformFloat4("u_Color", color2);
+				flatShader->SetFloat4("u_Color", color2);
 
-			Holt::Renderer::Submit(m_ShaderLibrary.Get("Flat"), m_SquareVertexArray, transform);
+			Holt::Renderer::Submit(flatShader, m_SquareVertexArray, transform);
 		}
 	}
 
