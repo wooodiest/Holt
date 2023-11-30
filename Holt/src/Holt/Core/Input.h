@@ -13,6 +13,7 @@ namespace Holt {
 	public:
 		Input(const Input&) = delete;
 		Input& operator=(const Input&) = delete;
+		static void Init();
 
 	public:
 		inline static bool IsKeyPressed(KeyCode key) { return s_Instance->IsKeyPressedImpl(key); }
@@ -29,6 +30,8 @@ namespace Holt {
 		virtual std::pair<float, float> GetMousePositionImpl() = 0;
 		virtual float GetMouseXImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
+
+		static Scope<Input> Create();
 
 	private:
 		static Scope<Input> s_Instance;

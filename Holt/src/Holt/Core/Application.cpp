@@ -1,6 +1,7 @@
 #include "hlpch.h"
 #include "Application.h"
 
+#include "Input.h"
 #include "Holt/Renderer/Renderer.h"
 
 #include "Holt/Core/Timestep.h"
@@ -18,8 +19,10 @@ namespace Holt {
 
 		s_Instance = this;
 
-		m_Window.reset(Window::Create());
+		m_Window = Window::Create();
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+		Input::Init();
 
 		Renderer::Init();
 
