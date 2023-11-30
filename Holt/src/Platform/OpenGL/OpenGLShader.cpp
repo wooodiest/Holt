@@ -23,6 +23,8 @@ namespace Holt {
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 		: m_FilePath(filepath)
 	{
+		HL_PROFILE_FUNCTION();
+
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
@@ -37,6 +39,8 @@ namespace Holt {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)
 	{
+		HL_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -45,16 +49,22 @@ namespace Holt {
 
 	OpenGLShader::~OpenGLShader()
 	{
+		HL_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind() const
 	{
+		HL_PROFILE_FUNCTION();
+
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
+		HL_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 
@@ -145,6 +155,8 @@ namespace Holt {
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		HL_PROFILE_FUNCTION();
+		
 		GLuint program = glCreateProgram();
 		HL_CORE_ASSERT(shaderSources.size() <= 2, "Supporting only 2 shaders now");
 		std::array<GLenum, 2> glShaderIDs;
@@ -215,6 +227,8 @@ namespace Holt {
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		HL_PROFILE_FUNCTION();
+
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
@@ -235,6 +249,8 @@ namespace Holt {
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		HL_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";

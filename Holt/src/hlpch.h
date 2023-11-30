@@ -14,6 +14,8 @@
 
 #include "Holt/Core/Log.h"
 
+#include "Holt/Debug/Instrumentor.h"
+
 #ifdef HL_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

@@ -16,6 +16,8 @@ namespace Holt {
 
 	void OpenGLContext::Init()
 	{
+		HL_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		HL_CORE_ASSERT(status, "Failed to initialize Glad!");
@@ -36,6 +38,8 @@ namespace Holt {
 
 	void OpenGLContext::SwapBuffers()
 	{
+		HL_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(m_WindowHandle);
 	}
 

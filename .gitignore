@@ -14,3 +14,7 @@ x64/
 **.vcxproj.filters
 **.vcxproj.user
 **.csproj
+
+Holt-Profile-Runtime.json
+Holt-Profile-Shutdown.json
+Holt-Profile-Startup.json

@@ -21,6 +21,8 @@ namespace Holt {
 
 	void Renderer2D::Init()
 	{
+		HL_PROFILE_FUNCTION();
+
 		s_Data = new Renderer2DStorage();
 		s_Data->_VertexArray = VertexArray::Create();
 		float verticies[7 * 3] = {
@@ -51,17 +53,22 @@ namespace Holt {
 
 	void Renderer2D::Shutdown()
 	{
+		HL_PROFILE_FUNCTION();
+
 		delete s_Data;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
+		HL_PROFILE_FUNCTION();
+
 		s_Data->_Shader->Bind();
 		s_Data->_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
 	{
+		HL_PROFILE_FUNCTION();
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -71,6 +78,8 @@ namespace Holt {
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
+		HL_PROFILE_FUNCTION();
+
 		s_Data->_Shader->Bind();
 		s_Data->_Shader->SetFloat4("u_Color", color);
 		s_Data->_Shader->SetFloat("u_TexScale", 1.0f);
@@ -91,6 +100,8 @@ namespace Holt {
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, const float textureScale)
 	{
+		HL_PROFILE_FUNCTION();
+
 		s_Data->_Shader->Bind();
 		s_Data->_Shader->SetFloat4("u_Color", tint);
 		s_Data->_Shader->SetFloat("u_TexScale", textureScale);

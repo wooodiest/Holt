@@ -23,22 +23,30 @@ namespace Holt {
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
+		HL_PROFILE_FUNCTION();
+
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
+		HL_PROFILE_FUNCTION();
+
 		Shutdown();
 	}
 
 	void WindowsWindow::OnUpdate()
 	{
+		HL_PROFILE_FUNCTION();
+
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enebled)
 	{
+		HL_PROFILE_FUNCTION();
+
 		if (enebled)
 			glfwSwapInterval(1);
 		else
@@ -54,6 +62,8 @@ namespace Holt {
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		HL_PROFILE_FUNCTION();
+
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
@@ -171,6 +181,8 @@ namespace Holt {
 
 	void WindowsWindow::Shutdown()
 	{
+		HL_PROFILE_FUNCTION();
+
 		glfwDestroyWindow(m_Window);
 		--s_GLFWWindowCount;
 		if (s_GLFWWindowCount == 0)
