@@ -17,8 +17,9 @@ private:
 	Holt::Ref<Holt::Texture2D> m_CheckerboardTexture;
 	glm::vec4 m_Color1 = { 0.8f, 0.2f, 0.3f, 1.0f };
 	glm::vec4 m_Color2 = { 0.2f, 0.3f, 0.8f, 1.0f };
-	glm::vec4 m_Tint1   = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glm::vec4 m_Tint2 = { 0.2f, 0.3f, 0.4f, 0.85f };
-	float textureScale = 10.0f;
+	glm::vec4 m_TintColor1   = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glm::vec4 m_TintColor2 = { 0.2f, 0.3f, 0.4f, 0.85f };
+	float m_tilingFactor = 10.0f;
+	float m_RoteatedQuadRotation = 45.0f;
 
 };
