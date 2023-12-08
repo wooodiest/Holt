@@ -204,7 +204,7 @@ namespace Holt {
 	}
 }
 
-#define HL_PROFILE 1
+#define HL_PROFILE 0
 #if HL_PROFILE
 // Resolve which function signature macro will be used. Note that this only
 // is resolved when the (pre)compiler starts, so the syntax highlighting
