@@ -73,6 +73,11 @@ namespace Holt {
 		UploadUniformInt(name, value);
 	}
 
+	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
+	{
+		UploadUniformIntArray(name, values, count);
+	}
+
 	void OpenGLShader::SetFloat(const std::string& name, const float value)
 	{
 		UploadUniformFloat(name, value);
@@ -115,6 +120,12 @@ namespace Holt {
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform4i(location, static_cast<int>(value.x), static_cast<int>(value.y), static_cast<int>(value.z), static_cast<int>(value.w));
+	}
+
+	void OpenGLShader::UploadUniformIntArray(const std::string& name, int* values, uint32_t count)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform1iv(location, count, values);
 	}
 
 	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)

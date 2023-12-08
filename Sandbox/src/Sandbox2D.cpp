@@ -42,10 +42,10 @@ void Sandbox2D::OnUpdate(Holt::Timestep ts)
 		HL_PROFILE_SCOPE("Renderer Draw");
 
 		Holt::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Holt::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, m_Color1);
+		Holt::Renderer2D::DrawQuad({ -0.4f, -0.4f }, { 0.8f, 0.8f }, m_Color1);
 		Holt::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, m_Color2);
-		Holt::Renderer2D::DrawQuad({ 0.0f, -0.0f, -0.1f }, { 5.0f, 5.0f }, m_CheckerboardTexture, m_tilingFactor, m_TintColor1);
-		Holt::Renderer2D::DrawRotatedQuad({ 1.0f, -1.0f, 0.05f }, { 1.0f, 1.0f }, glm::radians(m_RoteatedQuadRotation), m_CheckerboardTexture, 1.0f, m_TintColor2);
+		Holt::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.5f }, { 10.0f, 10.0f }, m_CheckerboardTexture, m_tilingFactor, m_TintColor1);
+		//Holt::Renderer2D::DrawRotatedQuad({ 1.0f, -1.0f, 0.05f }, { 1.0f, 1.0f }, glm::radians(m_RoteatedQuadRotation), m_CheckerboardTexture, 1.0f, m_TintColor2);
 		Holt::Renderer2D::EndScene();
 	}
 
