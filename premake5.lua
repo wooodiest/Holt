@@ -2,7 +2,7 @@ include "Dependencies.lua"
 
 workspace "Holt"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Holt-Editor"
 
 	configurations
 	{
@@ -26,6 +26,7 @@ group ""
 
 include "Holt"
 include "Sandbox"
+include "Holt-Editor"
 
 
 

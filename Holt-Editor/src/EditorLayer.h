@@ -1,0 +1,31 @@
+#pragma once
+#include "Holt.h"
+
+namespace Holt {
+
+	class EditorLayer : public Layer
+	{
+	public:
+		EditorLayer();
+		virtual ~EditorLayer();
+
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
+		virtual void OnUpdate(Holt::Timestep ts) override;
+		virtual void OnImGuiRender() override;
+		virtual void OnEvent(Holt::Event& event) override;
+	private:
+		OrthographicCameraController m_CameraController;
+		Ref<Texture2D> m_CheckerboardTexture;
+		Ref<Framebuffer> m_FrameBuffer;
+
+		glm::vec4 m_Color1 = { 0.8f, 0.2f, 0.3f, 1.0f };
+		glm::vec4 m_Color2 = { 0.2f, 0.3f, 0.8f, 1.0f };
+		glm::vec4 m_TintColor1 = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glm::vec4 m_TintColor2 = { 0.2f, 0.3f, 0.4f, 0.85f };
+		float m_tilingFactor = 10.0f;
+		float m_RoteatedQuadRotation = 45.0f;
+
+	};
+
+}

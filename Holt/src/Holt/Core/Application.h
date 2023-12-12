@@ -24,7 +24,7 @@ namespace Holt {
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Holt App");
 		virtual ~Application() = default;
 
 		void Run();
