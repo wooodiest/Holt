@@ -22,8 +22,6 @@ namespace Holt {
 		m_Window = Window::Create(WindowProps(name));
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-		Input::Init();
-
 		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
