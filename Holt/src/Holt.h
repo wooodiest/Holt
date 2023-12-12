@@ -22,6 +22,7 @@
 		
 #include "Holt/Renderer/Buffer.h"
 #include "Holt/Renderer/Shader.h"
+#include "Holt/Renderer/Framebuffer.h"
 #include "Holt/Renderer/Texture.h"
 #include "Holt/Renderer/VertexArray.h"
 	
