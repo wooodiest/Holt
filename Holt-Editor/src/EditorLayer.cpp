@@ -1,6 +1,7 @@
 #include "EditorLayer.h"
 
 #include "imgui/imgui.h"
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Holt {
 
@@ -24,6 +25,13 @@ namespace Holt {
 		spec.Width = 1280;
 		spec.Height = 720;
 		m_Framebuffer = Holt::Framebuffer::Create(spec);
+
+		m_ActiveScene = CreateRef<Scene>();
+		auto square = m_ActiveScene->CreateEntity();
+		m_ActiveScene->Reg().emplace<TransformComponent>(square, glm::vec3{ 0.0f, 0.0f, 0.0f });
+		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(square, glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+		m_SquareEntity = square;
+
 	}
 
 	void EditorLayer::OnDetach()
@@ -63,47 +71,8 @@ namespace Holt {
 
 			Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-			Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.5f }, { 30.0f, 30.0f }, m_CheckerboardTexture, m_tilingFactor, m_TintColor1);
-			Renderer2D::DrawQuad({ -0.4f, -0.4f }, { 0.8f, 0.8f }, m_Color1);
-			Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, m_Color2);
-			Renderer2D::DrawRotatedQuad({ 2.0f, -1.0f, 0.05f }, { 1.0f, 1.0f }, glm::radians(m_RoteatedQuadRotation), m_CheckerboardTexture, 1.0f, m_TintColor2);
+			m_ActiveScene->OnUpdate(ts);
 
-			static float rotation = 0.0f;
-			rotation += 50.0f * ts;
-			Holt::Renderer2D::DrawRotatedQuad({ 2.0f, -3.0f, 0.1f }, { 2.0f, 2.0f }, glm::radians(rotation), { 1.0f, 0.0f, 0.0f, 1.0f });
-
-#if 0 // Draw 10k quads
-			for (float y = -5.0f; y < 5.0f; y += 0.1f)
-			{
-				for (float x = -5.0f; x < 5.0f; x += 0.1f)
-				{
-					glm::vec4 color = { (x + 5.0f) / 10.0f, (x + 5.0f) / 10.0f, (y + 5.0f) / 10.0f, 0.9f };
-					Renderer2D::DrawQuad({ x, y }, { 0.1f, 0.1f }, color);
-				}
-			}
-#endif
-
-#if 1 // Draw 40k quads
-			for (float y = -10.0f; y < 10.0f; y += 0.1f)
-			{
-				for (float x = -10.0f; x < 10.0f; x += 0.1f)
-				{
-					glm::vec4 color = { (x + 10.0f) / 20.0f, (x + 10.0f) / 20.0f, (y + 10.0f) / 20.0f, 0.9f };
-					Renderer2D::DrawQuad({ x, y }, { 0.1f, 0.1f }, color);
-				}
-			}
-#endif
-
-#if 0 // Draw 100k quads
-			for (float y = -10.0f; y < 10.0f; y += 0.063f)
-			{
-				for (float x = -10.0f; x < 10.0f; x += 0.063f)
-				{
-					glm::vec4 color = { (x + 10.0f) / 20.0f, (x + 10.0f) / 20.0f, (y + 10.0f) / 20.0f, 0.9f };
-					Renderer2D::DrawQuad({ x, y }, { 0.063f, 0.063f }, color);
-				}
-			}
-#endif
 			Renderer2D::EndScene();
 			m_Framebuffer->Unbind();
 		}
@@ -175,15 +144,10 @@ namespace Holt {
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		ImGui::SeparatorText("");
+		ImGui::Separator();
 		ImGui::Text("Scene Settings:");
-		ImGui::ColorEdit4("Color-1", &m_Color1.r);
-		ImGui::ColorEdit4("Color-2", &m_Color2.r);
-		ImGui::ColorEdit4("Tint-1", &m_TintColor1.r);
-		ImGui::DragFloat("Tiling factor", &m_tilingFactor, 0.1f);
-		ImGui::ColorEdit4("Tint-2", &m_TintColor2.r);
-		ImGui::DragFloat("Quad rotation", &m_RoteatedQuadRotation, 0.5f, 0.0f, 360.0f);
-
+		auto& squareColor = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Color;
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 		ImGui::End();
 
 		// Viewport

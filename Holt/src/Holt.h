@@ -28,3 +28,6 @@
 	
 #include "Holt/Renderer/OrthographicCamera.h"
 
+#include "Holt/Scene/Scene.h"
+#include "Holt/Scene/Components.h"
+

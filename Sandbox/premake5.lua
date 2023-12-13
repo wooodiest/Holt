@@ -19,6 +19,7 @@ project "Sandbox"
 		"%{wks.location}/Holt/src",
 		"%{wks.location}/Holt/vendor",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links

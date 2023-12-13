@@ -22,6 +22,9 @@ namespace Holt {
 
 		Ref<Texture2D> m_CheckerboardTexture;
 
+		Ref<Scene> m_ActiveScene;
+		entt::entity m_SquareEntity;
+
 		glm::vec4 m_Color1 = { 0.8f, 0.2f, 0.3f, 1.0f };
 		glm::vec4 m_Color2 = { 0.2f, 0.3f, 0.8f, 1.0f };
 		glm::vec4 m_TintColor1 = { 1.0f, 1.0f, 1.0f, 1.0f };
