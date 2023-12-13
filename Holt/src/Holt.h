@@ -14,6 +14,10 @@
 #include "Holt/ImGui/ImGuiLayer.h"
 #include "Holt/Core/Timestep.h"
 
+#include "Holt/Scene/Scene.h"
+#include "Holt/Scene/Components.h"
+#include "Holt/Scene/Entity.h"
+
 // ---Renderer------------------------
 
 #include "Holt/Renderer/Renderer.h"
@@ -28,6 +32,4 @@
 	
 #include "Holt/Renderer/OrthographicCamera.h"
 
-#include "Holt/Scene/Scene.h"
-#include "Holt/Scene/Components.h"
 
