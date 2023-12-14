@@ -17,6 +17,7 @@
 #include "Holt/Scene/Scene.h"
 #include "Holt/Scene/Components.h"
 #include "Holt/Scene/Entity.h"
+#include "Holt/Scene/ScriptableEntity.h"
 
 // ---Renderer------------------------
 

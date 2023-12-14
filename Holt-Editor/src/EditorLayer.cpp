@@ -34,6 +34,29 @@ namespace Holt {
 		m_MainCameraEntity = m_ActiveScene->CreateEntity("Main Camera");
 		m_MainCameraEntity.AddComponent<CameraComponent>();
 
+		class CameraController : public ScriptableEntity
+		{
+		public:
+
+			virtual void OnUpdate(Timestep ts)
+			{
+				auto& transform = GetComponent<TransformComponent>().Translation;
+				
+				float speed = 5.0f;
+
+				if (Input::IsKeyPressed(KeyCode::A))
+					transform.x -= speed * ts;
+				if (Input::IsKeyPressed(KeyCode::D))
+					transform.x += speed * ts;
+				if (Input::IsKeyPressed(KeyCode::W))
+					transform.y += speed * ts;
+				if (Input::IsKeyPressed(KeyCode::S))
+					transform.y -= speed * ts;
+				
+			}
+		};
+		m_MainCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
 	}
 
 	void EditorLayer::OnDetach()
