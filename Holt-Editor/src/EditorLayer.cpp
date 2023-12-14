@@ -28,9 +28,12 @@ namespace Holt {
 
 		m_ActiveScene = CreateRef<Scene>();
 
-		auto square = m_ActiveScene->CreateEntity("I am an Entity");
-		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
-		m_SquareEntity = square;
+		m_SquareEntity = m_ActiveScene->CreateEntity("I am an Entity");
+		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+
+		m_MainCameraEntity = m_ActiveScene->CreateEntity("Main Camera");
+		m_MainCameraEntity.AddComponent<CameraComponent>();
+
 	}
 
 	void EditorLayer::OnDetach()
@@ -49,6 +52,8 @@ namespace Holt {
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		// Update
@@ -56,26 +61,17 @@ namespace Holt {
 			m_CameraController.OnUpdate(ts);
 
 		// Render
-		Renderer2D::ResetStats();
-		{
-			HL_PROFILE_SCOPE("Renderer Prep");
+		Renderer2D::ResetStats();	
 
-			m_Framebuffer->Bind();
-			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-			RenderCommand::Clear();
-		}
+		m_Framebuffer->Bind();
 
-		{
-			HL_PROFILE_SCOPE("Renderer Draw");
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
+		
+		m_ActiveScene->OnUpdate(ts);
 
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-			m_ActiveScene->OnUpdate(ts);
-
-			Renderer2D::EndScene();
-			m_Framebuffer->Unbind();
-		}
-
+		m_Framebuffer->Unbind();
+		
 	}
 
 	void EditorLayer::OnImGuiRender()

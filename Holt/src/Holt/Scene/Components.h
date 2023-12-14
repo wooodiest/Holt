@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Holt/Renderer/Texture.h"
+#include "SceneCamera.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -17,6 +18,7 @@ namespace Holt {
 		TagComponent(const TagComponent&) = default;
 		TagComponent(const std::string& tag)
 			: Tag(tag) {}
+
 	};
 
 	struct TransformComponent
@@ -51,6 +53,17 @@ namespace Holt {
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			: Color(color) {}
+
+	};
+
+	struct CameraComponent
+	{
+		SceneCamera Camera;
+		bool Primary = true;
+		bool FixedAspectRatio = false;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
 
 	};
 
