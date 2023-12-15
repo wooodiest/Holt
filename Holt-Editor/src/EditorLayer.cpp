@@ -28,7 +28,7 @@ namespace Holt {
 
 		m_ActiveScene = CreateRef<Scene>();
 
-		m_SquareEntity = m_ActiveScene->CreateEntity("I am an Entity");
+		m_SquareEntity = m_ActiveScene->CreateEntity("Square Entity");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 
 		m_MainCameraEntity = m_ActiveScene->CreateEntity("Main Camera");
@@ -57,6 +57,8 @@ namespace Holt {
 		};
 		m_MainCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
+
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -149,6 +151,8 @@ namespace Holt {
 
 			ImGui::EndMenuBar();
 		}
+		//
+		m_SceneHierarchyPanel.OnImGuiRender();
 
 		// Settings / Stats
 		ImGui::Begin("Settings");

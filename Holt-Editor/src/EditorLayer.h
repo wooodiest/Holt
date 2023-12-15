@@ -1,5 +1,8 @@
 #pragma once
-#include "Holt.h"
+
+#include <Holt.h>
+
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace Holt {
 
@@ -15,6 +18,10 @@ namespace Holt {
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Holt::Event& event) override;
 	private:
+		// Panels
+		SceneHierarchyPanel m_SceneHierarchyPanel;
+
+		//
 		OrthographicCameraController m_CameraController;
 		Ref<Framebuffer> m_Framebuffer;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
