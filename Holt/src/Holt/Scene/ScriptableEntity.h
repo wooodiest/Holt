@@ -12,7 +12,7 @@ namespace Holt {
 		template<typename T>
 		T& GetComponent()
 		{
-			return m_Entity.GetCommponent<T>();
+			return m_Entity.GetComponent<T>();
 		}
 
 	protected:

@@ -22,7 +22,7 @@ namespace Holt {
 		}
 
 		template<typename T>
-		T& GetCommponent()
+		T& GetComponent()
 		{
 			HL_CORE_ASSERT(HasComponent<T>(), "Entity does not have component");
 			return m_Scene->m_Registry.get<T>(m_EntityHandle);

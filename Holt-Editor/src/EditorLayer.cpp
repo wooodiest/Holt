@@ -170,10 +170,10 @@ namespace Holt {
 		{
 			ImGui::Separator();
 
-			auto& tag = m_SquareEntity.GetCommponent<TagComponent>().Tag;
+			auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
 			ImGui::Text("%s", tag.c_str());
 
-			auto& squareColor = m_SquareEntity.GetCommponent<SpriteRendererComponent>().Color;
+			auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 
 			ImGui::Separator();
