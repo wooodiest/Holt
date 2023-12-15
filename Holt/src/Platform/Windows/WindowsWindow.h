@@ -22,6 +22,7 @@ namespace Holt {
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		virtual void SetVSync(bool enebled) override;
 		virtual bool IsVSync() const override;
+		virtual void Maximize() override;
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 

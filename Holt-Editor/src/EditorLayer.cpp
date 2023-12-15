@@ -41,6 +41,15 @@ namespace Holt {
 		ent2.GetComponent<TransformComponent>().Scale.x *= 2;
 		ent2.GetComponent<TransformComponent>().Scale.y *= 2;
 
+		auto ent3 = m_ActiveScene->CreateEntity("Square - 3");
+		ent3.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
+		ent3.GetComponent<SpriteRendererComponent>().Texture = m_CheckerboardTexture;
+		ent3.GetComponent<TransformComponent>().Rotation.z = glm::radians(45.0f);
+		ent3.GetComponent<TransformComponent>().Translation.x = 0.0f;
+		ent3.GetComponent<TransformComponent>().Translation.y = 3.0f;
+		ent3.GetComponent<TransformComponent>().Scale.x *= 2;
+		ent3.GetComponent<TransformComponent>().Scale.y *= 2;
+
 		auto cam1 = m_ActiveScene->CreateEntity("Orthograpic camera");
 		cam1.AddComponent<CameraComponent>();
 		cam1.GetComponent<CameraComponent>().Primary = true;

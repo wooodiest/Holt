@@ -56,6 +56,11 @@ namespace Holt {
 		return m_Data.VSync;
 	}
 
+	void WindowsWindow::Maximize()
+	{
+		glfwMaximizeWindow(m_Window);
+	}
+
 	void WindowsWindow::Init(const WindowProps& props)
 	{
 		HL_PROFILE_FUNCTION();

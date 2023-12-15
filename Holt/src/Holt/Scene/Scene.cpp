@@ -73,7 +73,10 @@ namespace Holt {
 			{
 				auto [transform, sprite] = group.get< TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+				if (sprite.Texture == nullptr)
+					Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+				else
+					Renderer2D::DrawQuad(transform.GetTransform(), sprite.Texture, sprite.TilingFactor, sprite.Color);
 			}
 
 			Renderer2D::EndScene();
