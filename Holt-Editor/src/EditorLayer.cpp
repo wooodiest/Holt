@@ -36,7 +36,7 @@ namespace Holt {
 		ent1.GetComponent<TransformComponent>().Scale.y *= 2;
 
 		auto ent2 = m_ActiveScene->CreateEntity("Square - 2");
-		ent2.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f });
+		ent2.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
 		ent2.GetComponent<TransformComponent>().Translation.x = 2.0f;
 		ent2.GetComponent<TransformComponent>().Scale.x *= 2;
 		ent2.GetComponent<TransformComponent>().Scale.y *= 2;
@@ -75,7 +75,6 @@ namespace Holt {
 			}
 		};
 		cam1.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
