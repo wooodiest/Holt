@@ -28,9 +28,6 @@ namespace Holt {
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 
 		Ref<Scene> m_ActiveScene;
-		Entity m_Square;
-		Entity m_CameraA;
-		Entity m_CameraB;
 
 		Ref<Texture2D> m_CheckerboardTexture;
 	};

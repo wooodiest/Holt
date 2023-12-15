@@ -26,17 +26,29 @@ namespace Holt {
 		spec.Height = 720;
 		m_Framebuffer = Holt::Framebuffer::Create(spec);
 
+		///
 		m_ActiveScene = CreateRef<Scene>();
 
-		m_Square = m_ActiveScene->CreateEntity("Square");
-		m_Square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+		auto ent1 = m_ActiveScene->CreateEntity("Square - 1");
+		ent1.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+		ent1.GetComponent<TransformComponent>().Translation.x = -2.0f;
+		ent1.GetComponent<TransformComponent>().Scale.x *= 2;
+		ent1.GetComponent<TransformComponent>().Scale.y *= 2;
 
-		m_CameraA = m_ActiveScene->CreateEntity("Camera A");
-		m_CameraA.AddComponent<CameraComponent>();
+		auto ent2 = m_ActiveScene->CreateEntity("Square - 2");
+		ent2.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f });
+		ent2.GetComponent<TransformComponent>().Translation.x = 2.0f;
+		ent2.GetComponent<TransformComponent>().Scale.x *= 2;
+		ent2.GetComponent<TransformComponent>().Scale.y *= 2;
 
-		m_CameraB = m_ActiveScene->CreateEntity("Camera B");
-		m_CameraB.AddComponent<CameraComponent>();
-		m_CameraB.GetComponent<CameraComponent>().Primary = false;
+		auto cam1 = m_ActiveScene->CreateEntity("Orthograpic camera");
+		cam1.AddComponent<CameraComponent>();
+		cam1.GetComponent<CameraComponent>().Primary = true;
+
+		auto cam2 = m_ActiveScene->CreateEntity("Perspective camera");
+		cam2.AddComponent<CameraComponent>();
+		cam2.GetComponent<CameraComponent>().Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
+		cam2.GetComponent<TransformComponent>().Translation.z = 25.0f;
 
 		class CameraController : public ScriptableEntity
 		{
@@ -45,21 +57,24 @@ namespace Holt {
 			virtual void OnUpdate(Timestep ts)
 			{
 				auto& transform = GetComponent<TransformComponent>().Translation;
-				
+				auto& camera = GetComponent<CameraComponent>();
+
 				float speed = 5.0f;
 
-				if (Input::IsKeyPressed(KeyCode::A))
-					transform.x -= speed * ts;
-				if (Input::IsKeyPressed(KeyCode::D))
-					transform.x += speed * ts;
-				if (Input::IsKeyPressed(KeyCode::W))
-					transform.y += speed * ts;
-				if (Input::IsKeyPressed(KeyCode::S))
-					transform.y -= speed * ts;
-				
+				if (camera.Primary)
+				{
+					if (Input::IsKeyPressed(KeyCode::A))
+						transform.x -= speed * ts;
+					if (Input::IsKeyPressed(KeyCode::D))
+						transform.x += speed * ts;
+					if (Input::IsKeyPressed(KeyCode::W))
+						transform.y += speed * ts;
+					if (Input::IsKeyPressed(KeyCode::S))
+						transform.y -= speed * ts;
+				}			
 			}
 		};
-		m_CameraA.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		cam1.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);

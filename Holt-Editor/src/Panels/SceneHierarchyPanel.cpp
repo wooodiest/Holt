@@ -130,13 +130,13 @@ namespace Holt {
 					if (ImGui::DragFloat("Vertical FOV", &verticalFov))
 						camera.SetPerspectiveVerticalFOV(glm::radians(verticalFov));
 
-					float orthoNear = camera.GetPerspectiveNearClip();
-					if (ImGui::DragFloat("Near", &orthoNear))
-						camera.SetPerspectiveNearClip(orthoNear);
+					float perspNear = camera.GetPerspectiveNearClip();
+					if (ImGui::DragFloat("Near", &perspNear))
+						camera.SetPerspectiveNearClip(perspNear);
 
-					float orthoFar = camera.GetPerspectiveFarClip();
-					if (ImGui::DragFloat("Far", &orthoFar))
-						camera.SetPerspectiveFarClip(orthoFar);
+					float perspFar = camera.GetPerspectiveFarClip();
+					if (ImGui::DragFloat("Far", &perspFar))
+						camera.SetPerspectiveFarClip(perspFar);
 				}
 
 				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
@@ -161,7 +161,15 @@ namespace Holt {
 			}
 		}
 
-
+		if (entity.HasComponent<SpriteRendererComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+			{
+				auto& src = entity.GetComponent<SpriteRendererComponent>();
+				ImGui::ColorEdit4("Color", glm::value_ptr(src.Color));
+				ImGui::TreePop();
+			}
+		}
 	}
 
 }
