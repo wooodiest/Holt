@@ -28,11 +28,15 @@ namespace Holt {
 
 		m_ActiveScene = CreateRef<Scene>();
 
-		m_SquareEntity = m_ActiveScene->CreateEntity("Square Entity");
-		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+		m_Square = m_ActiveScene->CreateEntity("Square");
+		m_Square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 
-		m_MainCameraEntity = m_ActiveScene->CreateEntity("Main Camera");
-		m_MainCameraEntity.AddComponent<CameraComponent>();
+		m_CameraA = m_ActiveScene->CreateEntity("Camera A");
+		m_CameraA.AddComponent<CameraComponent>();
+
+		m_CameraB = m_ActiveScene->CreateEntity("Camera B");
+		m_CameraB.AddComponent<CameraComponent>();
+		m_CameraB.GetComponent<CameraComponent>().Primary = false;
 
 		class CameraController : public ScriptableEntity
 		{
@@ -55,7 +59,7 @@ namespace Holt {
 				
 			}
 		};
-		m_MainCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		m_CameraA.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
@@ -155,7 +159,7 @@ namespace Holt {
 		m_SceneHierarchyPanel.OnImGuiRender();
 
 		// Settings / Stats
-		ImGui::Begin("Settings");
+		ImGui::Begin("Stats");
 
 		auto stats = Holt::Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
@@ -166,18 +170,6 @@ namespace Holt {
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		if (m_SquareEntity)
-		{
-			ImGui::Separator();
-
-			auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
-			ImGui::Text("%s", tag.c_str());
-
-			auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
-			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-
-			ImGui::Separator();
-		}
 		ImGui::End();
 
 		// Viewport

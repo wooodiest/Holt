@@ -97,4 +97,23 @@ namespace Holt {
 
 	}
 
+	void Scene::SetPrimaryCamera(Entity entity)
+	{
+		auto view = m_Registry.view<CameraComponent>();
+		for (auto ent : view)
+		{
+			if (entity.m_EntityHandle != ent)
+			{
+				auto& cameraComponent = view.get<CameraComponent>(ent);
+				cameraComponent.Primary = false;
+			}
+			else
+			{
+				auto& cameraComponent = view.get<CameraComponent>(ent);
+				cameraComponent.Primary = true;
+			}
+
+		}
+	}
+
 }
