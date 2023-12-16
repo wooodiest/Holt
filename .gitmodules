@@ -11,3 +11,6 @@
 [submodule "Holt/vendor/glm"]
 	path = Holt/vendor/glm
 	url = https://github.com/wooodiest/glm
+[submodule "Holt/vendor/yaml-cpp"]
+	path = Holt/vendor/yaml-cpp
+	url = https://github.com/wooodiest/yaml-cpp

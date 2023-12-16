@@ -22,6 +22,7 @@ group "Dependencies"
 	include "Holt/vendor/GLFW"
 	include "Holt/vendor/Glad"
 	include "Holt/vendor/imgui"
+	include "Holt/vendor/yaml-cpp"
 group ""
 
 include "Holt"

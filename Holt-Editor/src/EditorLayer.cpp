@@ -3,6 +3,8 @@
 #include "imgui/imgui.h"
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Holt/Scene/SceneSerializer.h"
+
 namespace Holt {
 
 	EditorLayer::EditorLayer()
@@ -29,6 +31,7 @@ namespace Holt {
 		///
 		m_ActiveScene = CreateRef<Scene>();
 
+#if 0
 		auto ent1 = m_ActiveScene->CreateEntity("Square - 1");
 		ent1.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 		ent1.GetComponent<TransformComponent>().Translation.x = -2.0f;
@@ -84,7 +87,7 @@ namespace Holt {
 			}
 		};
 		cam1.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
+#endif
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
@@ -176,6 +179,18 @@ namespace Holt {
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("Exit")) Holt::Application::Get().Close();
+
+				if (ImGui::MenuItem("Serialize"))
+				{
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Serialize("assets/scenes/Example.holt");
+				}
+
+				if (ImGui::MenuItem("Deserialize"))
+				{
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Deserialize("assets/scenes/Example.holt");
+				}
 
 				ImGui::EndMenu();
 			}
