@@ -18,6 +18,13 @@ namespace Holt {
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Holt::Event& event) override;
 	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
+
+	private:
 		// Panels
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 
