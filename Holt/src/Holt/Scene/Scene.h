@@ -22,6 +22,7 @@ namespace Holt {
 
 	public:
 		void SetPrimaryCamera(Entity entity);
+		Entity GetPrimaryCameraEntity();
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 

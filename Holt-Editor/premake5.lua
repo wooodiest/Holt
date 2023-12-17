@@ -19,7 +19,8 @@ project "Holt-Editor"
 		"%{wks.location}/Holt/src",
 		"%{wks.location}/Holt/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links

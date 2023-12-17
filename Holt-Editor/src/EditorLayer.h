@@ -27,7 +27,7 @@ namespace Holt {
 	private:
 		// Panels
 		SceneHierarchyPanel m_SceneHierarchyPanel;
-
+		int m_GizmoType = -1;
 		//
 		OrthographicCameraController m_CameraController;
 		Ref<Framebuffer> m_Framebuffer;

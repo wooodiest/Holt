@@ -17,7 +17,9 @@ project "Holt"
 		"vendor/stb_image/**.h",
 		"vendor/stb_image/**.cpp",
 		"vendor/glm/glm/**.hpp",
-		"vendor/glm/glm/**.inl"
+		"vendor/glm/glm/**.inl",
+		"vendor/imguizmo/ImGuizmo.h",
+		"vendor/imguizmo/ImGuizmo.cpp"
 	}
 
 	defines
@@ -35,7 +37,8 @@ project "Holt"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links
@@ -46,6 +49,9 @@ project "Holt"
 		"opengl32.lib",
 		"yaml-cpp"
 	}
+
+	filter "files:vendor/imguizmo/**.cpp"
+	flags { "NoPCH" }
 
 	filter "system:windows"
         systemversion "latest"

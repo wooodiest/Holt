@@ -14,3 +14,6 @@
 [submodule "Holt/vendor/yaml-cpp"]
 	path = Holt/vendor/yaml-cpp
 	url = https://github.com/wooodiest/yaml-cpp
+[submodule "Holt/vendor/imguizmo"]
+	path = Holt/vendor/imguizmo
+	url = https://github.com/wooodiest/ImGuizmo
