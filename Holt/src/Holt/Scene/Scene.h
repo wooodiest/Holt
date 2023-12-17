@@ -3,6 +3,7 @@
 #include "entt.hpp"
 
 #include "Holt/Core/Timestep.h"
+#include "Holt/Renderer/EditorCamera.h"
 
 namespace Holt {
 
@@ -17,7 +18,8 @@ namespace Holt {
 		Entity CreateEntity(const std::string& = std::string());
 		void DestroyEntity(Entity entity);
 
-		void OnUpdate(Timestep ts);
+		void OnUpdateRuntime(Timestep ts);
+		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 	public:

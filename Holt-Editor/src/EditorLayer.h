@@ -3,6 +3,7 @@
 #include <Holt.h>
 
 #include "Panels/SceneHierarchyPanel.h"
+#include "Holt/Renderer/EditorCamera.h"
 
 namespace Holt {
 
@@ -27,6 +28,7 @@ namespace Holt {
 	private:
 		// Panels
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		EditorCamera m_EditorCamera;
 		int m_GizmoType = -1;
 		//
 		OrthographicCameraController m_CameraController;

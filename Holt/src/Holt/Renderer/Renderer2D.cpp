@@ -121,6 +121,18 @@ namespace Holt {
 		StartBatch();
 	}
 
+	void Renderer2D::BeginScene(const EditorCamera& camera)
+	{
+		HL_PROFILE_FUNCTION();
+
+		glm::mat4 viewProj = camera.GetViewProjection();
+
+		s_Data.DefaultShader->Bind();
+		s_Data.DefaultShader->SetMat4("u_ViewProjection", viewProj);
+
+		StartBatch();
+	}
+
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		HL_PROFILE_FUNCTION();
