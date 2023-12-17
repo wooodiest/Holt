@@ -29,16 +29,13 @@ namespace Holt {
 		// Panels
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		EditorCamera m_EditorCamera;
-		int m_GizmoType = -1;
-		//
-		OrthographicCameraController m_CameraController;
 		Ref<Framebuffer> m_Framebuffer;
+		Ref<Scene> m_ActiveScene;
+
+		int m_GizmoType = -1;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 
-		Ref<Scene> m_ActiveScene;
-
-		Ref<Texture2D> m_CheckerboardTexture;
 	};
 
 }

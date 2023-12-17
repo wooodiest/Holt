@@ -11,7 +11,7 @@
 namespace Holt {
 
 	EditorLayer::EditorLayer()
-		: Layer("Sandbox2D"), m_CameraController(1600.0f / 900.0f, true)
+		: Layer("Sandbox2D")
 	{
 		HL_PROFILE_FUNCTION();
 	}
@@ -24,7 +24,6 @@ namespace Holt {
 	void EditorLayer::OnAttach()
 	{
 		HL_PROFILE_FUNCTION();
-		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 
 		FramebufferSpecification spec;
 		spec.Width = 1280;
@@ -57,15 +56,11 @@ namespace Holt {
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
-			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		// Update
-		if(m_ViewportFocused)
-			m_CameraController.OnUpdate(ts);
-
 		m_EditorCamera.OnUpdate(ts);
 
 		// Render
@@ -236,7 +231,6 @@ namespace Holt {
 
 	void EditorLayer::OnEvent(Holt::Event& event)
 	{
-		m_CameraController.OnEvent(event);
 		m_EditorCamera.OnEvent(event);
 
 		EventDispatcher dispatcher(event);
